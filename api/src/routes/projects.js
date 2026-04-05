@@ -3,6 +3,7 @@ const router = express.Router();
 const authenticate = require('../middlewares/authenticate');
 const validate = require('../middlewares/validate');
 const { projectValidator } = require('../middlewares/validators');
+const { cache, invalidateCache } = require('../middlewares/cache');
 
 
 const {
@@ -15,10 +16,10 @@ const {
 
 router.use(authenticate);
 
-router.get('/', getAllProjects);
-router.post('/', projectValidator, validate, createProject);
+router.get('/', cache(60), getAllProjects);
+router.post('/', projectValidator, validate, invalidateCache('/api/projects*'), createProject);
 router.get('/:id', getProject);
-router.put('/:id', projectValidator, validate, updateProject);
-router.delete('/:id', deleteProject);
+router.put('/:id', projectValidator, validate, invalidateCache('api/projects*'), updateProject);
+router.delete('/:id', invalidateCache('/api/projects*'), deleteProject);
 
 module.exports = router;
