@@ -10,14 +10,20 @@ const taskRoutes = require('./routes/tasks');
 const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
+
 app.use(express.json());
+
+
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date() });
+});
 
 const loginLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 5,
   message: { error: 'Too many login attempts, please try again after a minute' },
 });
-
 
 app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth', authRoutes);
@@ -26,13 +32,9 @@ app.use('/api', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date() });
-});
+
 
 const PORT = process.env.PORT || 7000;
-
-
 
 sequelize.authenticate()
   .then(() => {
