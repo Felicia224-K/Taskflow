@@ -1,10 +1,12 @@
 require('dotenv').config();
+const http = require('http');
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const { sequelize } = require('./models');
+const { initWebSocket } = require('./websocket');
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const taskRoutes = require('./routes/tasks');
@@ -12,7 +14,10 @@ const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
+const server = http.createServer(app);
+
 app.use(cors({
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -44,11 +49,18 @@ sequelize.authenticate()
     console.log('Database connected successfully');
     return sequelize.sync({ alter: true });
   })
+
   .then(() => {
-    app.listen(PORT, () =>
-      console.log(`Server running on port: http://localhost:${PORT}`));
+    server.listen(PORT, () => {
+      console.log(`Server running on port: http://localhost:${PORT}`);
       console.log(`Swagger UI is available at: http://localhost:${PORT}/api-docs`);
-  })
+
+      initWebSocket(server);
+      console.log('WebSocket server initialized');
+
+  }); 
+
+})
   .catch(err => {
     console.error('Unable to connect to database:', err);
     process.exit(1);

@@ -1,4 +1,5 @@
 const { Task, Project } = require('../models');
+const { broadcast } = require('../websocket');
 
 exports.getProjectTasks = async (req, res) => {
   try {
@@ -73,6 +74,13 @@ exports.updateTaskStatus = async (req, res) => {
     }
 
     await task.update({ status });
+
+
+    broadcast({
+      type: 'TASK_STATUS_UPDATED',
+      task: task,
+    });
+
     res.json({ task });
   } catch (err) {
     res.status(500).json({ error: err.message });

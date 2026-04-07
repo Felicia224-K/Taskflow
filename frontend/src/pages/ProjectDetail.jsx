@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import TaskCard from '../components/TaskCard';
@@ -13,6 +13,8 @@ const ProjectDetail = () => {
   const [showForm, setShowForm] = useState(false);
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'medium', dueDate: '' });
   const [filter, setFilter] = useState({ status: '', priority: '' });
+  const wsRef = useRef(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +36,37 @@ const ProjectDetail = () => {
 
 
 
-  const handleCreateTask = async (e) => {
+
+   useEffect(() => {
+    const ws = new WebSocket(`ws://localhost:7000/ws`);
+    wsRef.current = ws;
+
+
+    ws.onopen = () => {
+        console.log('WebSocket connected');
+    };
+
+    ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type === 'TASK_STATUS_UPDATED') {
+      setTasks(prev => prev.map(t =>
+        t.id === data.task.id ? data.task : t
+      ));
+    }
+  };
+
+  ws.onerror = (err) => {
+    console.error('WebSocket error:', err);
+  };
+
+  return () => {
+    ws.close();
+  };
+}, []);
+  
+
+
+const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
       const res = await api.post(`/api/projects/${id}/tasks`, newTask);
@@ -44,7 +76,7 @@ const ProjectDetail = () => {
     } catch (_err) {
       setError(_err.response?.data?.error || 'Failed to create task');
     }
-  };
+};
 
   const handleStatusChange = async (taskId, status) => {
     try {
@@ -91,14 +123,24 @@ const ProjectDetail = () => {
             </h1>
             <p style={{ color: '#6b7280' }}>{project.description || 'No description'}</p>
           </div>
-          
-            
-        
 
-
+          <a href="/dashboard"
+          style={{
+              background: '#f3f4f6',
+              color: '#374151',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.375rem',
+              textDecoration: 'none',
+              fontWeight: 'bold',
+              fontSize: '0.875rem',
+          }}
+           >
+            Back
+          </a>
 
         </div>
       </div>
+
 
       {/* Tasks Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
