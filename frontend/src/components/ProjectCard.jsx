@@ -1,6 +1,7 @@
 const ProjectCard = ({ project }) => {
   return (
     <div
+        onClick={() => window.location.href = `projects/${project.id}`}
       style={{
         background: 'white',
         borderRadius: '0.5rem',
