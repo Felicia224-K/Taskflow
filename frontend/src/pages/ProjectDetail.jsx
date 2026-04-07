@@ -15,23 +15,22 @@ const ProjectDetail = () => {
   const [filter, setFilter] = useState({ status: '', priority: '' });
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [projectRes, tasksRes] = await Promise.all([
+          api.get(`/api/projects/${id}`),
+          api.get(`/api/projects/${id}/tasks`),
+        ]);
+        setProject(projectRes.data.project);
+        setTasks(tasksRes.data.tasks);
+      } catch  {
+        setError('Failed to load project');
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
   }, [id]);
-
-  const fetchData = async () => {
-    try {
-      const [projectRes, tasksRes] = await Promise.all([
-        api.get(`/api/projects/${id}`),
-        api.get(`/api/projects/${id}/tasks`),
-      ]);
-      setProject(projectRes.data.project);
-      setTasks(tasksRes.data.tasks);
-    } catch  {
-      setError('Failed to load project');
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
 

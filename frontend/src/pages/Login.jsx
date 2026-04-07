@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 
 const Login = () => {
+    const {login } = useAuth() 
+
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,8 +19,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await api.post('/api/auth/login', form);
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      login(res.data.token, res.data.user);
       window.location.href = '/dashboard';
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
