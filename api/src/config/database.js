@@ -9,7 +9,7 @@ if (process.env.DATABASE_URL) {
     dialect: 'postgres',
     logging: false,
     dialectOptions: {
-      ssl: process.env.NODE_ENV === 'production' ? {
+      ssl: process.env.NODE_ENV === 'development' ? {
         require: true,
         rejectUnauthorized: false,
       }: false,
