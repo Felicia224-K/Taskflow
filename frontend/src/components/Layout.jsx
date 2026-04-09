@@ -26,6 +26,18 @@ const Layout = ({ children }) => {
         <span style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>TaskFlow</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: "1rem"}}>
             <span>Hello, {user?.name} </span>
+            <a href="/profile"
+               style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: '0.875rem',
+                border: '1px solid white',
+                padding: '0.4rem 0.75rem',
+                borderRadius: '0.375rem',
+              }}
+            >
+              Profile
+            </a>
             <button
                 onClick={toggleTheme}
                 style={{ background: 'transparent', color: 'white', border: '1px solid white', padding: '0.4rem 0.75rem', borderRadius: '0.375rem', cursor: 'pointer', fontSize: '0.875rem'}}

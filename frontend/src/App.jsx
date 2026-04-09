@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ProjectDetail from './pages/ProjectDetail';
+import Profile from './pages/Profile';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<AuthGuard> <Dashboard /> </AuthGuard>} />
         <Route path="projects/:id" element={<AuthGuard> <ProjectDetail /> </AuthGuard>} />
+        <Route path="profile" element={<AuthGuard> < Profile /> </AuthGuard>} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
