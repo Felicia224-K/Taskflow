@@ -1,3 +1,5 @@
+import { useTheme } from '../context/ThemeContext';
+
 const priorityColors = {
   low: { bg: '#dbeafe', text: '#1e40af' },
   medium: { bg: '#fef3c7', text: '#92400e' },
@@ -11,12 +13,16 @@ const statusColors = {
 };
 
 const TaskCard = ({ task, onStatusChange }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const priority = priorityColors[task.priority] || priorityColors.medium;
   const status = statusColors[task.status] || statusColors.todo;
 
   return (
     <div style={{
-      background: 'white',
+      background: isDark ? '#1f2937' : 'white',
+      color: isDark ? '#f9fafb' : '#111827',
       borderRadius: '0.5rem',
       padding: '1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.1)',

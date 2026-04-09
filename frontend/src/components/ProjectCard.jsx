@@ -1,9 +1,13 @@
+import { useTheme } from '../context/ThemeContext';
 const ProjectCard = ({ project }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   return (
     <div
         onClick={() => window.location.href = `projects/${project.id}`}
       style={{
-        background: 'white',
+        background: isDark ? '#1f2937'  : 'white',
+        color: isDark ? '#f9fafb' : '#111827', 
         borderRadius: '0.5rem',
         padding: '1.5rem',
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',

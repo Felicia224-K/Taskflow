@@ -1,15 +1,22 @@
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+
+
 const Layout = ({ children }) => {
     const { user, logout } = useAuth();
+    const {theme, toggleTheme} = useTheme();
 
     const handleLogout = () => {
         logout();
         window.location.href = '/login';
     };
+
+    const isDark = theme ==='dark';
+   
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: isDark ? '#111827' : '#f9fafb', color: isDark ? '#f9fafb' : '#111827', }}>
       <nav style={{
-        background: '#6366f1',
+        background: isDark ? '#1f2937' : '#6366f1',
         padding: '1rem 2rem',
         display: 'flex',
         justifyContent: 'space-between',
@@ -19,6 +26,12 @@ const Layout = ({ children }) => {
         <span style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>TaskFlow</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: "1rem"}}>
             <span>Hello, {user?.name} </span>
+            <button
+                onClick={toggleTheme}
+                style={{ background: 'transparent', color: 'white', border: '1px solid white', padding: '0.4rem 0.75rem', borderRadius: '0.375rem', cursor: 'pointer', fontSize: '0.875rem'}}
+            >
+                {isDark ? 'Light' : 'Dark'}
+            </button>
             <button
                 onClick={handleLogout}
                 style={{

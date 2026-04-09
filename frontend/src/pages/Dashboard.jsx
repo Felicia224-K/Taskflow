@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import ProjectCard from '../components/ProjectCard';
+import { useTheme } from '../context/ThemeContext'
 import api from '../services/api';
 
 const Dashboard = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [projects, setProjects] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -63,7 +66,7 @@ const Dashboard = () => {
             { label: 'High Priority', value: stats.highPriorityTasks, color: '#ef4444' },
           ].map((stat) => (
             <div key={stat.label} style={{
-              background: 'white',
+              background: isDark ? '#1f2937' : 'white',
               padding: '1.25rem',
               borderRadius: '0.5rem',
               boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
@@ -101,7 +104,7 @@ const Dashboard = () => {
 
       {showForm && (
         <form onSubmit={handleCreateProject} style={{
-          background: 'white',
+          background: isDark ? '#1f2937' : 'white',
           padding: '1.5rem',
           borderRadius: '0.5rem',
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)',

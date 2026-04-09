@@ -2,9 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import TaskCard from '../components/TaskCard';
+import { useTheme } from '../context/ThemeContext'
 import api from '../services/api';
 
 const ProjectDetail = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState([]);
@@ -109,7 +112,7 @@ const handleCreateTask = async (e) => {
     <Layout>
       {/* Project Header */}
       <div style={{
-        background: 'white',
+        background: isDark ? '#1f2937' :  'white',
         padding: '1.5rem',
         borderRadius: '0.5rem',
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
