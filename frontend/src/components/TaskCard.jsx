@@ -12,12 +12,21 @@ const statusColors = {
   done: { bg: '#d1fae5', text: '#065f46' },
 };
 
-const TaskCard = ({ task, onStatusChange }) => {
+const TaskCard = ({ task, onStatusChange, onDelete }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
   const priority = priorityColors[task.priority] || priorityColors.medium;
   const status = statusColors[task.status] || statusColors.todo;
+
+
+
+  const handleDelete =  (e) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure to delete '${task.title}'?`)) {
+      onDelete(task.id);
+    }
+  };
 
   return (
     <div style={{
@@ -70,6 +79,21 @@ const TaskCard = ({ task, onStatusChange }) => {
             Due: {new Date(task.dueDate).toLocaleDateString()}
           </span>
         )}
+        <button
+          onClick={handleDelete}
+          style={{
+            background: '#fee2e2',
+            color: '#991b1b',
+            border: 'none',
+            padding: '0.25rem 0.75rem',
+            borderRadius: '0.375rem',
+            cursor: 'pointer',
+            fontSize: '0.75rem',
+            fontWeight: 'bold',
+          }}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );

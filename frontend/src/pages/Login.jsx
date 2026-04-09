@@ -109,6 +109,7 @@ const Login = () => {
               color: 'white',
               border: 'none',
               borderRadius: '0.375rem',
+              marginBottom: '1rem',
               fontSize: '1rem',
               fontWeight: 'bold',
               cursor: loading ? 'not-allowed' : 'pointer',
@@ -117,12 +118,29 @@ const Login = () => {
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
+
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              background: '#6366f1',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.375rem',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? 0.7 : 1,
+            }}
+          >
+            {loading ? 'Registering  in...' : 'Register new account'}
+          </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.875rem' }}>
-          Don't have an account?{' '}
-          <a href="/register" style={{ color: '#6366f1', fontWeight: 'bold' }}>Register</a>
-        </p>
+
+        
       </div>
     </div>
   );

@@ -48,6 +48,16 @@ const Dashboard = () => {
 
   if (loading) return <Layout><div>Loading...</div></Layout>;
 
+  const handleDeleteProject = async (projectId) => {
+    try {
+      await api.delete(`/api/projects/${projectId}`);
+    setProjects(projects.filter(p => p.id !== projectId));
+    fetchData();
+    } catch {
+      setError('Failed to delete project');
+    }
+  };
+
   return (
     <Layout>
       {stats && (
@@ -192,7 +202,7 @@ const Dashboard = () => {
           gap: '1rem',
         }}>
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard key={project.id} project={project} onDelete={handleDeleteProject} />
           ))}
         </div>
       )}

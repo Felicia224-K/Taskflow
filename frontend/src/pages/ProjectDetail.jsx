@@ -108,6 +108,15 @@ const handleCreateTask = async (e) => {
   if (loading) return <Layout><div>Loading...</div></Layout>;
   if (!project) return <Layout><div>Project not found</div></Layout>;
 
+
+   const handleDeleteTask = async (taskId) => {
+    try {
+      await api.delete(`/api/tasks/${taskId}`);
+    setTasks(tasks.filter(t => t.id !== taskId));
+    } catch {
+      setError('Failed to delete task');
+    }
+  };
   return (
     <Layout>
       {/* Project Header */}
@@ -314,7 +323,7 @@ const handleCreateTask = async (e) => {
         </div>
       ) : (
         tasks.map((task) => (
-          <TaskCard key={task.id} task={task} onStatusChange={handleStatusChange} />
+          <TaskCard key={task.id} task={task} onStatusChange={handleStatusChange} onDelete={handleDeleteTask}/>
         ))
       )}
     </Layout>

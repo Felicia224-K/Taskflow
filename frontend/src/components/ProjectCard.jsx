@@ -1,13 +1,22 @@
 import { useTheme } from '../context/ThemeContext';
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, onDelete }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure to delete '${project.name}' and all its tasks`)) {
+      onDelete(project.id);
+    }
+  };
+
+
   return (
     <div
         onClick={() => window.location.href = `projects/${project.id}`}
       style={{
         background: isDark ? '#1f2937'  : 'white',
-        color: isDark ? '#f9fafb' : '#111827', 
+        color: isDark ? '#f9fafb' : '#111827',
         borderRadius: '0.5rem',
         padding: '1.5rem',
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
@@ -32,6 +41,23 @@ const ProjectCard = ({ project }) => {
       }}>
         {project.status}
       </span>
+
+      <button
+          onClick={handleDelete}
+          style={{
+            background: '#fee2e2',
+            color: '#991b1b',
+            border: 'none',
+            padding: '0.25rem 0.75rem',
+            borderRadius: '0.375rem',
+            cursor: 'pointer',
+            fontSize: '0.75rem',
+            fontWeight: 'bold',
+          }}
+        >
+          Delete
+        </button>
+
     </div>
   );
 };
